@@ -37,19 +37,17 @@ npm run dev or yarn dev
 
 ## Running the tests
 
-Explain how to run the automated tests for this system (WIP)
+``` 
+npm test or yarn test
+```
 
 ### Break down into end to end tests
 
-Explain what these tests test and why
+all tests developed are integration tests
 
 ```
 Give an example
 ```
-
-## Deployment
-
-WIP
 
 ## Built With
 
@@ -57,14 +55,11 @@ WIP
 * [Express](https://expressjs.com/en/4x/api.html) - Framework NodeJS responsible for management the routes of the API
 * [Typescript](https://www.typescriptlang.org/) - TypeScript is an open-source language which builds on JavaScript
 * [Jest](https://jestjs.io/) - Jest is a delightful JavaScript Testing Framework with a focus on simplicity.
+* [TypeORM](https://typeorm.io/#/) - TypeORM is an Object Relational Mapper library running in node. js and written in TypeScript.
 
 ## Contributing
 
 Please read [CONTRIBUTING.md]() for details on our code of conduct, and the process for submitting pull requests to us.
-
-## Versioning
-
-WIP
 
 ## Authors
 
