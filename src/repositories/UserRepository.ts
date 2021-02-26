@@ -3,7 +3,7 @@ import { User } from "../models/User"
 
 @EntityRepository(User)
 class UserRepository extends Repository<User> {
-   public async criar(name: String, email: String) {
+   public async criar(name: string, email: string) {
       const usersRepository = getRepository(User)
 
       const result = await this.verificaEmailJaExiste(email, usersRepository)
@@ -17,14 +17,10 @@ class UserRepository extends Repository<User> {
       }
    }
 
-   private async verificaEmailJaExiste(email: String, repository: Repository<User>) {
+   public async verificaEmailJaExiste(email: string, repository: Repository<User>) {
       const alreadyExists = await repository.findOne({ email })
 
-      if (alreadyExists) {
-         return true
-      } else {
-         return false
-      }
+      return alreadyExists
    }
 
 }

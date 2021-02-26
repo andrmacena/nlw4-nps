@@ -3,7 +3,7 @@ import { Survey } from "../models/Survey"
 
 @EntityRepository(Survey)
 class SurveyRepository extends Repository<Survey> {
-   public async criar(title: String, description: String) {
+   public async criar(title: string, description: string) {
 
       const surveyRepository = getRepository(Survey)
 
@@ -15,13 +15,22 @@ class SurveyRepository extends Repository<Survey> {
 
    }
 
-   public async listarTodos() { 
+   public async listarTodos() {
 
       const surveyRepository = getRepository(Survey)
 
       const all = surveyRepository.find()
 
       return all
+
+   }
+
+   public async buscaUma(id: string) {
+      const surveyRepository = getRepository(Survey)
+
+      const surveyExists = surveyRepository.findOne({ id })
+
+      return surveyExists
 
    }
 
