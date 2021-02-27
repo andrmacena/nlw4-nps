@@ -1,5 +1,6 @@
 import { Request, Response } from "express"
 import { getCustomRepository } from "typeorm"
+import { AppError } from "../erros/AppError"
 import { SurveyRepository } from "../repositories/SurveyRepository"
 
 
@@ -14,7 +15,7 @@ class SurveyController {
       if (survey) {
          return response.status(201).json(survey)
       } else {
-         return response.status(400).json({ error: "Não foi possível criar uma pesquisa" })
+         throw new AppError('Não foi possível criar uma pesquisa')
       }
 
    }
@@ -28,7 +29,7 @@ class SurveyController {
       if (all) {
          return response.status(200).json(all)
       } else {
-         return response.status(400).json({ error: "Erro ao pesquisar" })
+         throw new AppError('Erro ao pesquisar')
       }
 
    }

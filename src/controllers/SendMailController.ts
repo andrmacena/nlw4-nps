@@ -5,6 +5,7 @@ import { SurveyUserRepository } from "../repositories/SurveyUserRespository"
 import { UserRepository } from "../repositories/UserRepository"
 import SendMailService from "../services/SendMailService"
 import { resolve } from 'path'
+import { AppError } from "../erros/AppError"
 
 
 class SendMailController {
@@ -15,36 +16,35 @@ class SendMailController {
       const surveyRepository = getCustomRepository(SurveyRepository)
       const surveyUserRepository = getCustomRepository(SurveyUserRepository)
 
-
-
       const user = await usersRepository.verificaEmailJaExiste(email, usersRepository)
 
       if (!user) {
-         return response.status(400).json({ error: "Usuário não existe" })
+         throw new AppError('Usuário não existe')
       }
 
       const survey = await surveyRepository.buscaUma(survey_id)
 
       if (!survey) {
-         return response.status(400).json({ error: "Pesquisa não existente" })
+         throw new AppError('Pesquisa não existente')
       }
 
+      
+      const npsPath = resolve(__dirname, '..', 'views', 'emails', 'npsMail.hbs')
+      
+      const surveyUserAlreadyExists = await surveyUserRepository.findOne({
+         where: { user_id: user.id, value: null },
+         relations: ["user", "survey"]
+      })
+      
       const variables = {
          name: user.name,
          title: survey.title,
          description: survey.description,
-         user_id: user.id,
+         id: '',
          link: process.env.URL_MAIL
       }
-
-      const npsPath = resolve(__dirname, '..', 'views', 'emails', 'npsMail.hbs')
-
-      const surveyUserAlreadyExists = await surveyUserRepository.findOne({
-         where: [{ user_id: user.id }, { value: null }],
-         relations: ["user", "survey"]
-      })
-
       if (surveyUserAlreadyExists) {
+         variables.id = surveyUserAlreadyExists.id
          await SendMailService.send(email, survey.title, variables, npsPath)
          return response.json(surveyUserAlreadyExists)
       }
@@ -55,6 +55,8 @@ class SendMailController {
       })
 
       await surveyUserRepository.save(surveyUser)
+
+      variables.id = surveyUser.id
 
       await SendMailService.send(email, survey.title, variables, npsPath)
 
